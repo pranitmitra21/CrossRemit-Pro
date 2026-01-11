@@ -64,21 +64,22 @@ const TransactionHistory = ({ account, isDarkMode }) => {
                                         </p>
                                     </div>
                                 </div>
-                                <p className={`font-bold ${isSend
-                                    ? (isDarkMode ? 'text-gray-200' : 'text-gray-900')
-                                    : (isDarkMode ? 'text-green-400' : 'text-green-600')
-                                    }`}>
-                                    {isSend ? '-' : '+'}{Number(formatUnits(tx.amount || "0", 18)).toFixed(4)} SETH
-                                </p>
-                                <p className={`text-xs ${isDarkMode ? 'text-slate-500' : 'text-gray-500'}`}>
-                                    ≈ {(Number(formatUnits(tx.amount || "0", 18)) * Number(tx.rate || 0)).toLocaleString(undefined, { maximumFractionDigits: 2 })} {tx.currency}
-                                </p>
+                                <div className="text-right">
+                                    <p className={`font-bold ${isSend
+                                        ? (isDarkMode ? 'text-gray-200' : 'text-gray-900')
+                                        : (isDarkMode ? 'text-green-400' : 'text-green-600')
+                                        }`}>
+                                        {isSend ? '-' : '+'}{Number(formatUnits(tx.amount || "0", 18)).toFixed(4)} SETH
+                                    </p>
+                                    <p className={`text-xs ${isDarkMode ? 'text-slate-500' : 'text-gray-500'}`}>
+                                        ≈ {(Number(formatUnits(tx.amount || "0", 18)) * Number(tx.rate || 0)).toLocaleString(undefined, { maximumFractionDigits: 2 })} {tx.currency}
+                                    </p>
+                                </div>
                             </div>
-                            </div>
-            );
+                        );
                     })
                 )}
-        </div>
+            </div>
         </div >
     );
 };
