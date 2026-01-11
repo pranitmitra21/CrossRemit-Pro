@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const { JSONFilePreset } = require('lowdb/node');
+// const { JSONFilePreset } = require('lowdb/node'); // Use dynamic import in initDB
 const ethers = require('ethers');
 require('dotenv').config({ path: '../.env' }); // Load from root
 
@@ -16,6 +16,7 @@ const defaultData = { users: [], transactions: [] };
 let db;
 
 async function initDB() {
+    const { JSONFilePreset } = await import('lowdb/node');
     db = await JSONFilePreset('db.json', defaultData);
     console.log("Database initialized");
 }
