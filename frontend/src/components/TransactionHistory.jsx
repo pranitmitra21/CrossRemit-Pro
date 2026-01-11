@@ -25,8 +25,11 @@ const TransactionHistory = ({ account, isDarkMode }) => {
             const res = await fetch(`${API_URL}/api/transactions/${account}`);
             const data = await res.json();
             setHistory(data);
-        } catch (e) { console.error(e); }
-        finally { setLoading(false); }
+        } catch (e) {
+            console.error(e);
+        } finally {
+            setLoading(false);
+        }
     };
 
     if (!account) return null;
@@ -46,6 +49,10 @@ const TransactionHistory = ({ account, isDarkMode }) => {
                 ) : (
                     history.map((tx) => {
                         const isSend = tx.sender.toLowerCase() === account.toLowerCase();
+                        const amount = Number(formatUnits(tx.amount || "0", 18));
+                        const rate = Number(tx.rate || 0);
+                        const converted = (amount * rate).toLocaleString(undefined, { maximumFractionDigits: 2 });
+
                         return (
                             <div key={tx.id} className={`flex justify-between items-center p-3 rounded-lg border border-transparent transition ${isDarkMode ? 'hover:bg-slate-800/50 hover:border-slate-700' : 'hover:bg-gray-50 hover:border-gray-100'}`}>
                                 <div className="flex items-center gap-3">
@@ -69,10 +76,10 @@ const TransactionHistory = ({ account, isDarkMode }) => {
                                         ? (isDarkMode ? 'text-gray-200' : 'text-gray-900')
                                         : (isDarkMode ? 'text-green-400' : 'text-green-600')
                                         }`}>
-                                        {isSend ? '-' : '+'}{Number(formatUnits(tx.amount || "0", 18)).toFixed(4)} SETH
+                                        {isSend ? '-' : '+'}{amount.toFixed(4)} SETH
                                     </p>
                                     <p className={`text-xs ${isDarkMode ? 'text-slate-500' : 'text-gray-500'}`}>
-                                        ≈ {(Number(formatUnits(tx.amount || "0", 18)) * Number(tx.rate || 0)).toLocaleString(undefined, { maximumFractionDigits: 2 })} {tx.currency}
+                                        ≈ {converted} {tx.currency}
                                     </p>
                                 </div>
                             </div>
@@ -80,7 +87,7 @@ const TransactionHistory = ({ account, isDarkMode }) => {
                     })
                 )}
             </div>
-        </div >
+        </div>
     );
 };
 
