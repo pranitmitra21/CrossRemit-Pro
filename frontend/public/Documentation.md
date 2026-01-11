@@ -1,0 +1,440 @@
+# 🌍 CrossRemit Pro - Developer Documentation
+
+<div align="center">
+
+**Blockchain-Powered Cross-Border Remittance Platform**
+
+[![Ethereum](https://img.shields.io/badge/Ethereum-3C3C3D?style=for-the-badge&logo=Ethereum&logoColor=white)](https://ethereum.org/)
+[![Solidity](https://img.shields.io/badge/Solidity-%23363636.svg?style=for-the-badge&logo=solidity&logoColor=white)](https://soliditylang.org/)
+[![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)](https://reactjs.org/)
+[![Node.js](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
+
+*Instant settlement • Bank-grade KYC • Multi-currency support*
+
+</div>
+
+---
+
+## 📋 Table of Contents
+
+- [🚀 Quick Start](#-quick-start)
+- [⚙️ Installation & Setup](#️-installation--setup)
+- [🔌 API Reference](#-api-reference)
+- [🛠️ Configuration](#️-configuration)
+- [🧪 Testing](#-testing)
+- [🐛 Troubleshooting](#-troubleshooting)
+- [📚 Architecture](#-architecture)
+
+---
+
+## 🚀 Quick Start
+
+**One-Click Launch** (Windows)
+
+Simply double-click `start_all.bat` and everything launches automatically:
+- ✅ Hardhat local blockchain
+- ✅ Smart contract deployment
+- ✅ Backend API server
+- ✅ Frontend development server
+- ✅ Browser opens automatically
+
+> **Note:** Ensure MetaMask is installed before running!
+
+---
+
+## ⚙️ Installation & Setup
+
+### Prerequisites
+
+| Requirement | Version | Download |
+|------------|---------|----------|
+| **Node.js** | v18+ | [nodejs.org](https://nodejs.org/) |
+| **MetaMask** | Latest | [metamask.io](https://metamask.io/) |
+| **Git** | Latest | [git-scm.com](https://git-scm.com/) |
+
+### Manual Setup
+
+<details>
+<summary><b>Step 1: Clone Repository</b></summary>
+
+```bash
+git clone <repo-url>
+cd Cross-Border-Remittance-main
+```
+</details>
+
+<details>
+<summary><b>Step 2: Install Dependencies</b></summary>
+
+Install dependencies for all three layers:
+
+```bash
+# Root (Hardhat & Smart Contracts)
+npm install
+
+# Backend API Server
+cd backend
+npm install
+
+# Frontend React App
+cd ../frontend
+npm install
+```
+</details>
+
+<details>
+<summary><b>Step 3: Start Local Blockchain</b></summary>
+
+**Terminal 1:**
+```bash
+npx hardhat node
+```
+
+> 💡 This provides 20 test accounts with 10,000 ETH each
+</details>
+
+<details>
+<summary><b>Step 4: Deploy Smart Contracts</b></summary>
+
+**Terminal 2:**
+```bash
+npx hardhat run Scripts/deploy-local.js --network localhost
+```
+
+> ⚠️ This auto-updates `frontend/src/config.json` with contract addresses
+</details>
+
+<details>
+<summary><b>Step 5: Start Backend Server</b></summary>
+
+**Terminal 3:**
+```bash
+cd backend
+node server.js
+```
+
+> 🌐 Server runs on `http://localhost:3001`
+</details>
+
+<details>
+<summary><b>Step 6: Start Frontend</b></summary>
+
+**Terminal 4:**
+```bash
+cd frontend
+npm run dev
+```
+
+> 🎨 Access the app at `http://localhost:5173`
+</details>
+
+---
+
+## 🔌 API Reference
+
+**Base URL:** `http://localhost:3001`
+
+### 👤 KYC Endpoints
+
+#### Submit KYC Application
+```http
+POST /api/kyc/submit
+Content-Type: application/json
+
+{
+  "address": "0x...",
+  "name": "John Doe",
+  "document": "passport123"
+}
+```
+
+#### Check KYC Status
+```http
+GET /api/kyc/status/:address
+```
+
+**Response:**
+```json
+{
+  "status": "verified" | "pending" | "rejected" | "not_found"
+}
+```
+
+---
+
+### 🔐 Admin Endpoints
+
+#### List Pending KYC Applications
+```http
+GET /api/admin/pending
+```
+
+#### Approve/Reject KYC
+```http
+POST /api/admin/update-status
+Content-Type: application/json
+
+{
+  "address": "0x...",
+  "status": "verified" | "rejected"
+}
+```
+
+---
+
+### 💱 Exchange Rate Endpoints
+
+#### Get Current FX Rates
+```http
+GET /api/rates?target=EUR
+```
+
+**Response:**
+```json
+{
+  "USD": 1.0,
+  "EUR": 0.92,
+  "GBP": 0.79,
+  "INR": 83.12,
+  "NGN": 1547.50
+}
+```
+
+---
+
+### 📊 Transaction Endpoints
+
+#### Record Transaction
+```http
+POST /api/transactions/record
+Content-Type: application/json
+
+{
+  "sender": "0x...",
+  "recipient": "0x...",
+  "amount": "100",
+  "currency": "USD"
+}
+```
+
+#### Get User Transaction History
+```http
+GET /api/transactions/:address
+```
+
+---
+
+### 🤖 AI & Utility Endpoints
+
+#### Fraud Risk Check
+```http
+POST /api/ai/fraud-check
+Content-Type: application/json
+
+{
+  "amount": "5000",
+  "recipient": "0x..."
+}
+```
+
+**Response:**
+```json
+{
+  "riskScore": 0.15,
+  "riskLevel": "low" | "medium" | "high"
+}
+```
+
+#### Request Test ETH (Faucet)
+```http
+POST /api/faucet/eth
+Content-Type: application/json
+
+{
+  "address": "0x..."
+}
+```
+
+---
+
+## 🛠️ Configuration
+
+### Environment Variables
+
+Create a `.env` file in the root directory:
+
+```env
+# Alchemy API (for testnet deployment)
+ALCHEMY_API_URL=https://polygon-amoy.g.alchemy.com/v2/YOUR_KEY
+
+# Deployment Private Key
+PRIVATE_KEY=0x...
+
+# Admin Wallet Address
+ADMIN_ADDRESS=0x...
+```
+
+> ⚠️ **Never commit `.env` to version control!**
+
+---
+
+### Frontend Configuration
+
+**File:** `frontend/src/config.json`
+
+Auto-generated by deployment script:
+
+```json
+{
+  "remittanceAddress": "0x...",
+  "mockTokenAddress": "0x...",
+  "remittanceABI": [...],
+  "mockTokenABI": [...]
+}
+```
+
+> 🔄 Regenerated on each deployment
+
+---
+
+## 🧪 Testing
+
+### Run Smart Contract Tests
+
+```bash
+npx hardhat test
+```
+
+### Test Specific Contract
+
+```bash
+npx hardhat test test/Remittance.js
+```
+
+### Check Test Coverage
+
+```bash
+npx hardhat coverage
+```
+
+---
+
+## 🐛 Troubleshooting
+
+### ❌ "User not KYC verified" Error
+
+**Cause:** Transaction attempted before admin approval
+
+**Solution:**
+1. Navigate to Admin Dashboard
+2. Find your wallet address
+3. Click **Approve**
+4. Watch backend terminal for `[Sync] Success`
+
+---
+
+### ⚪ White Screen on Frontend
+
+**Cause:** Missing `config.json` or connection error
+
+**Solution:**
+1. Ensure Hardhat node is running
+2. Redeploy contracts: `npx hardhat run Scripts/deploy-local.js --network localhost`
+3. Verify `frontend/src/config.json` exists
+4. Refresh browser
+
+---
+
+### 🔢 MetaMask "Nonce too high" Error
+
+**Cause:** Hardhat node restarted but MetaMask has cached state
+
+**Solution:**
+1. Open MetaMask
+2. Settings → Advanced
+3. **Clear Activity Tab Data**
+4. Refresh page
+
+---
+
+### 🔌 "Cannot connect to backend" Error
+
+**Cause:** Backend server not running or wrong port
+
+**Solution:**
+1. Verify backend is running on port 3001
+2. Check terminal for errors
+3. Restart backend: `cd backend && node server.js`
+
+---
+
+## 📚 Architecture
+
+### System Overview
+
+```
+┌─────────────────┐
+│   Frontend      │  React + Vite + TailwindCSS
+│  (Port 5173)    │  
+└────────┬────────┘
+         │
+         ├──────────────────┐
+         │                  │
+┌────────▼────────┐  ┌──────▼──────────┐
+│   Backend API   │  │  Smart Contracts│
+│  (Port 3001)    │  │   (Hardhat)     │
+│  Express + DB   │  │  Remittance.sol │
+└─────────────────┘  └─────────────────┘
+```
+
+### Tech Stack
+
+**Frontend:**
+- React 18
+- Vite
+- TailwindCSS
+- Ethers.js v6
+- Framer Motion
+
+**Backend:**
+- Node.js + Express
+- SQLite3
+- WebSocket (for real-time updates)
+
+**Blockchain:**
+- Hardhat
+- Solidity ^0.8.0
+- Ethers.js
+- OpenZeppelin Contracts
+
+---
+
+## 🎯 Key Features
+
+| Feature | Description |
+|---------|-------------|
+| 🔐 **KYC Verification** | Bank-grade identity verification |
+| ⚡ **Instant Settlement** | Blockchain-powered instant transfers |
+| 💱 **Multi-Currency** | Support for USD, EUR, GBP, INR, NGN |
+| 🤖 **AI Fraud Detection** | Real-time risk scoring |
+| 📊 **Transaction History** | Complete audit trail |
+| 🎨 **Modern UI** | Responsive, dark-mode design |
+
+---
+
+## 📞 Support
+
+For issues or questions:
+- 📧 Email: support@crossremit.pro
+- 💬 Discord: [Join our community](#)
+- 📖 Wiki: [GitHub Wiki](#)
+
+---
+
+<div align="center">
+
+**Built with ❤️ using Blockchain Technology**
+
+[⬆ Back to Top](#-crossremit-pro---developer-documentation)
+
+</div>
