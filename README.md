@@ -111,4 +111,4 @@ The platform consists of three main pillars:
 
 ---
 
-*Built with ❤️ by Antigravity*
+
